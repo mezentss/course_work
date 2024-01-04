@@ -1,0 +1,74 @@
+/* Основной цвет: #CBF458 */
+/* Вторичный цвет A: #78E251 */
+/* Вторичный цвет B: #F45870 */
+/* Дополнительный цвет: #CE4AA6 */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+    color: #000;
+  }
+  
+  h2 {
+    color: #7C9F1C;
+  }
+  
+  a {
+    color: #DAFA82;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    color: #E2FAA2;
+  }
+  
+  input[type="text"], input[type="password"], input[type="number"], select {
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #78E251;
+    border-radius: 5px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #F45870;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  button:hover {
+    background-color: #F98194;
+  }
+  
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  #header {
+    background-color: #CE4AA6;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  #menu {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+  }
+  
+  #menu li {
+    display: inline;
+    margin-right: 10px;
+  }
+  
+  footer {
+    background-color: #9B5084;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+  }
+  
