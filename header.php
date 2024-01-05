@@ -1,4 +1,7 @@
 <div id="header">
+<div class="logo-container">
+        <img src="images\logo.png" alt="Логотип" class="logo">
+    </div>
     <ul id="menu">
         <li><a href="allfood.php">Категории</a></li>
         <?php if(isset($pageid) && $session_user['id'] == $page["user_id"]):?>

@@ -1,6 +1,7 @@
 <?php
 require("db_connect.php");
 require("session.php");
+require("category_selector.php");
 
 if(!empty($_POST)){
     $name = $_POST["name"];
@@ -14,7 +15,7 @@ if(!empty($_POST)){
 
     if(mysqli_num_rows($result) == 0){
         mysqli_query($conn, "INSERT INTO users (name, login, password) VALUES (\"".$name."\", \"".$login."\", \"".$password."\")");
-        $user_id = mysqli_insert_id($conn); // Получаем user_id после вставки новой записи
+        $user_id = mysqli_insert_id($conn); 
         mysqli_query($conn, "INSERT INTO current_sugar (user_id, sugar_level, time) VALUES ($user_id, $sugar_level, NOW())");
 
         mysqli_query($conn, "INSERT INTO likes (user_id, favourite, unloved) VALUES ($user_id, $favourite, $unloved)");
@@ -48,22 +49,17 @@ $content = "
         </div>
         
         <div>
-            <label>Выберите любимую категорию</label>
-            <select name=\"favourite\">
-                <option value=\"2\">Мясо</option>
-                <option value=\"3\">Рыба и морепродукты</option>
-                <!-- Другие категории -->
-            </select>
-        </div>
-        
-        <div>
-            <label>Выберите нелюбимую категорию</label>
-            <select name=\"unloved\">
-                <option value=\"4\">Овощи и зелень</option>
-                <option value=\"5\">Фрукты и ягоды</option>
-                <!-- Другие категории -->
-            </select>
-        </div>
+        <label>Выберите любимую категорию</label>
+        <select name=\"favourite\">
+            " . getCategoryOptions($conn) . "
+        </select>
+    </div>
+    <div>
+        <label>Выберите нелюбимую категорию</label>
+        <select name=\"unloved\">
+            " . getCategoryOptions($conn) . "
+        </select>
+    </div>
 
         <div>
             <button type=\"submit\">Регистрация</button>

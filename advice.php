@@ -23,10 +23,10 @@ $selected_food_result = mysqli_query($conn, $selected_food_query);
 $product_data = "";
 
 while ($row = mysqli_fetch_assoc($selected_food_result)) {
-    $product_data .= "Name: " . $row['name'] . ", Satiety Index: " . $row['satiety_index'] . "<br>";
+    $product_data .= $row['name'] . $row['satiety_index'] . "<br>";
 }
 
-$title = "Recommended Products";
+$title = "Возможно вы захотите перекусить этими продуктами:";
 $content = $product_data;
 require("template.php");
 ?>

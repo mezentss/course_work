@@ -1,35 +1,41 @@
-/* Основной цвет: #CBF458 */
-/* Вторичный цвет A: #78E251 */
-/* Вторичный цвет B: #F45870 */
-/* Дополнительный цвет: #CE4AA6 */
-
 body {
     font-family: Arial, sans-serif;
     background-color: #fff;
     color: #000;
+    text-align: center;
+    padding: 20px 0 0 0;
+    margin-top: 60px; /* учитываем высоту header и footer */
+    margin-bottom: 60px;
   }
   
   h2 {
+    display: block;
+    margin: 0 auto;
     color: #7C9F1C;
+    text-align: center;
   }
   
   a {
-    color: #DAFA82;
+    color: #9F1C31;
     text-decoration: none;
   }
   
   a:hover {
-    color: #E2FAA2;
+    color: #F98194;
+    text-decoration: underline;
   }
   
   input[type="text"], input[type="password"], input[type="number"], select {
+    display: block;
+    margin: 10px auto;
     padding: 8px;
-    margin: 5px 0;
     border: 1px solid #78E251;
     border-radius: 5px;
   }
   
   button {
+    display: block;
+    margin: 20px auto;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -43,32 +49,59 @@ body {
     background-color: #F98194;
   }
   
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
   #header {
-    background-color: #CE4AA6;
-    padding: 10px;
-    text-align: center;
-  }
-  
-  #menu {
+    background-color: #F98194;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.logo-container {
+    display: flex; 
+}
+
+.logo {
+    max-width: 100px; 
+}
+
+#menu {
+    list-style: none; 
     padding: 0;
     margin: 0;
-    list-style-type: none;
-  }
-  
-  #menu li {
-    display: inline;
-    margin-right: 10px;
-  }
+    display: flex; 
+}
+
+#menu li {
+    margin: 0 10px; 
+}
+
+#menu li a {
+    color: #9F1C31;
+    text-decoration: none;
+    transition: color 0.3s; 
+}
+
+#menu li a:hover {
+    color: #F98194;
+    text-decoration: underline;
+    background-color: #9F1C31;
+}
   
   footer {
-    background-color: #9B5084;
-    color: #fff;
+    background-color: #F98194;
+    color: #9F1C31;
     text-align: center;
     padding: 10px 0;
+    margin-top: auto;
+	width: 100%;
+    position: relative; /* меняем на relative */
+    margin-top: 20px; /* устанавливаем отступ сверху */
   }
+
+  
   
