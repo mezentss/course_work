@@ -13,6 +13,14 @@ $sugar_query = "SELECT * FROM current_sugar WHERE user_id = {$user_id} ORDER BY 
 $sugar_result = mysqli_query($conn, $sugar_query);
 $sugar = mysqli_fetch_assoc($sugar_result);
 
+$likes_fv_query = "SELECT * FROM likes JOIN categories ON likes.favourite = categories.id WHERE user_id = {$user_id}";
+$likes_fv_result = mysqli_query($conn, $likes_fv_query);
+$likes_fv = mysqli_fetch_assoc($likes_fv_result);
+
+$likes_un_query = "SELECT * FROM likes JOIN categories ON likes.unloved = categories.id WHERE user_id = {$user_id}";
+$likes_un_result = mysqli_query($conn, $likes_un_query);
+$likes_un = mysqli_fetch_assoc($likes_un_result);
+
 if(isset($_POST['update_profile'])) {
     $name = $_POST["name"];
     $password = $_POST["password"];
@@ -80,14 +88,14 @@ $content .= '
     <div>
         <label>Любимая категория:</label>
         <select name="favourite_category">
-            <option value=""></option>
+            <option value= ""> '.$likes_fv['name']. '</option>
             ' . getCategoryOptions($conn) . '
         </select>
     </div>
     <div>
         <label>Нелюбимая категория:</label>
         <select name="unloved_category">
-            <option value="">Выберите категорию</option>
+        <option value= ""> '.$likes_un['name']. '</option>
             ' . getCategoryOptions($conn) . '
         </select>
     </div>
