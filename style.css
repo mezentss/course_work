@@ -4,13 +4,13 @@ body {
     color: #000;
     text-align: center;
     padding: 20px 0 0 0;
-    margin-top: 60px; /* учитываем высоту header и footer */
+    margin-top: 60px; 
     margin-bottom: 60px;
   }
   
   h2 {
     display: block;
-    margin: 0 auto;
+    margin: 20px auto;
     color: #7C9F1C;
     text-align: center;
   }
@@ -98,9 +98,9 @@ body {
     text-align: center;
     padding: 10px 0;
     margin-top: auto;
-	width: 100%;
-    position: relative; /* меняем на relative */
-    margin-top: 20px; /* устанавливаем отступ сверху */
+	  width: 100%;
+    position: relative; 
+    margin-top: 20px; 
   }
 
   
