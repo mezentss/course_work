@@ -2,11 +2,6 @@
 require("session.php");
 require("db_connect.php");
 
-if(!isset($_GET['id'])){
-    echo "Укажите id категории.";
-    exit;
-}
-
 $result = mysqli_query($conn, "SELECT * FROM categories WHERE id = {$_GET['id']}");
 
 if(!$result || mysqli_num_rows($result) == 0){
