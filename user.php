@@ -2,6 +2,7 @@
 require("session.php");
 require("db_connect.php");
 require("category_selector.php");
+require("facts.php");
 
 $user_id = $session_user['id'];
 $sugarLevelInfo = [];
@@ -78,6 +79,8 @@ if(isset($_POST['update_likes'])) {
     mysqli_query($conn, $update_likes_query);
 }
 
+$randomFact = get_random_fact(); 
+
 $title = "Личный кабинет";
 
 $content = '
@@ -107,7 +110,7 @@ $content = '
             </div>
         </form>
     </div>
-    <div style="padding-left: 0 20px 0 20px;">
+    <div style="padding: 0 20px 0 20px;">
         <form method="POST">
             <h2>Категории продуктов</h2>
             <div>
@@ -128,6 +131,10 @@ $content = '
                 <button type="submit" name="update_likes">Сохранить предпочтения</button>
             </div>
         </form>
+    </div>
+    <div style="padding: 0 20px 0 20px;">
+        <h2>Для вас!</h2>
+        <p>' .$randomFact. '</p>
     </div>
     <div style=" padding: 40px 0 0 450px;">
     <img src="' . $sugarLevelInfo['image'] . '" alt="Уровень сахара" style="max-width: 200px;">

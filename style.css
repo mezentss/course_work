@@ -24,6 +24,10 @@ body {
     color: #F98194;
     text-decoration: underline;
   }
+
+  p{
+    text-align: left;
+  }
   
   input[type="text"], input[type="password"], input[type="number"], select {
     display: block;
