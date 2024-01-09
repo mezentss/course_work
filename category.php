@@ -13,7 +13,12 @@ $category = mysqli_fetch_assoc($result);
 $title = "Категория: " . $category['name'];
 $content = "<h2>{$category['name']}</h2>";
 
-$food_result = mysqli_query($conn, "SELECT * FROM food WHERE category = {$category['id']}");
+$page = isset($_GET['page']) ? $_GET['page'] : 1;
+$limit = 17;
+$offset = ($page - 1) * $limit;
+
+$food_result = mysqli_query($conn, "SELECT * FROM food WHERE category = {$category['id']} LIMIT $limit OFFSET $offset");
+
 if(!$food_result || mysqli_num_rows($food_result) == 0){
     $content .= "<p>К сожалению, в этой категории нет продуктов.</p>";
 } else {
@@ -25,6 +30,7 @@ if(!$food_result || mysqli_num_rows($food_result) == 0){
 
     while($food = mysqli_fetch_assoc($food_result)){
         $satiety_text = '';
+
         if ($food['satiety_index'] <= 0.4) {
             $satiety_text = "Трудно насытиться";
         } elseif ($food['satiety_index'] > 0.4 && $food['satiety_index'] < 0.7) {
@@ -36,30 +42,41 @@ if(!$food_result || mysqli_num_rows($food_result) == 0){
         $content .= "<tr>
                         <td>{$food['name']}</td>
                         <td>{$satiety_text}</td>
-                     </tr>";
+                    </tr>";
     }
 
     $content .= "</table>";
+
+    ob_start();
+    require("template.php");
+    $output = ob_get_clean();
+
+    echo $output;
+
+    echo "<div style='display: flex; justify-content: space-around;'>
+            <div>
+                <h3>Содержание сахара</h3>
+                <canvas id='sugarSatietyChart' width='400' height='200'></canvas>
+            </div>
+            <div>
+                <h3>Содержание углеводов</h3>
+                <canvas id='carbsSatietyChart' width='400' height='200'></canvas>
+            </div>
+          </div>";
+
+    $nextPage = $page + 1;
+    $prevPage = $page - 1;
+
+    $prevDisabled = ($prevPage <= 0) ? "disabled" : "";
+    $nextDisabled = (mysqli_num_rows($food_result) < $limit) ? "disabled" : "";
+
+    echo "<div>
+            <a href='?id={$category['id']}&page={$prevPage}' class='btn' $prevDisabled>Предыдущая страница</a>
+            <a href='?id={$category['id']}&page={$nextPage}' class='btn' $nextDisabled>Следующая страница</a>
+          </div>";
 }
 
-ob_start();
-require("template.php");
-$output = ob_get_clean();
-
-echo $output;
-
 ?>
-
-<div style="display: flex; justify-content: space-around;">
-    <div>
-        <h3>Содержание сахара</h3>
-        <canvas id='sugarSatietyChart' width='400' height='200'></canvas>
-    </div>
-    <div>
-        <h3>Содержание углеводов</h3>
-        <canvas id='carbsSatietyChart' width='400' height='200'></canvas>
-    </div>
-</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
 <script>var sugarData = [];
