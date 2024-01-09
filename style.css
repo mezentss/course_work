@@ -3,7 +3,7 @@ body {
     background-color: #fff;
     color: #000;
     text-align: center;
-    padding: 20px 0 0 0;
+    padding: 20px 0 40px 0;
     margin-top: 60px; 
     margin-bottom: 60px;
   }
@@ -106,6 +106,10 @@ body {
     height: 50px;
     position: relative; 
     margin-top: 20px; 
+    position: fixed;
+    padding: 0 0 20px 0;
+    bottom: 0;
+    left: 0;
   }
 
   .chart-container {
@@ -120,4 +124,29 @@ body {
   }
 
   
-  
+  table {
+    float: left;
+}
+
+/* Добавим отступ слева */
+.chart-container {
+    margin-left: 20px;
+}
+
+@media screen and (max-width: 600px) {
+    table {
+        float: none; /* На узких экранах таблица будет занимать всю ширину */
+    }
+
+    .chart-container {
+        margin-left: 0; /* Убираем отступ слева на узких экранах */
+    }
+
+    .chart {
+        display: block;
+        margin: 20px auto;
+        width: 400px;
+    height: 200px;
+    margin-bottom: 20px;
+    }
+}
