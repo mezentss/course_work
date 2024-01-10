@@ -12,6 +12,8 @@ $result = mysqli_query($conn, "SELECT * FROM categories");
 $title = "Вся еда";
 $content = "<h2>Категории</h2>";
 
+$content .= "<div style='display: flex;'>
+                <div style='flex: 1;'>";
 if(!$result || mysqli_num_rows($result) == 0){
     $content .= "В базе данных нет категорий.";
 } else {
@@ -20,12 +22,15 @@ if(!$result || mysqli_num_rows($result) == 0){
     }
 }
 
-$randomFact = get_random_fact(); 
+$randomFact = get_random_fact();
 
-$content .= "<div> 
+$content .= "</div>
+            <div style='flex: 1;'>
                 <h2>Для вас!</h2>
                 <p>$randomFact</p>
-            </div>";
+            </div>
+        </div>";
+
 
 require("template.php");
 ?>

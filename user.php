@@ -128,7 +128,7 @@ $content = '
                 </select>
             </div>
             <div>
-                <button type="submit" name="update_likes">Сохранить предпочтения</button>
+                <button type="submit" name="update_likes">Сохранить</button>
             </div>
         </form>
     </div>

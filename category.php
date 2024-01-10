@@ -14,7 +14,7 @@ $title = "Категория: " . $category['name'];
 $content = "<h2>{$category['name']}</h2>";
 
 $page = isset($_GET['page']) ? $_GET['page'] : 1;
-$limit = 17;
+$limit = 10;
 $offset = ($page - 1) * $limit;
 
 $food_result = mysqli_query($conn, "SELECT * FROM food WHERE category = {$category['id']} LIMIT $limit OFFSET $offset");
@@ -69,19 +69,30 @@ if(!$food_result || mysqli_num_rows($food_result) == 0){
 
     $prevDisabled = ($prevPage <= 0) ? "disabled" : "";
     $nextDisabled = (mysqli_num_rows($food_result) < $limit) ? "disabled" : "";
-
-    echo "<div>
-            <a href='?id={$category['id']}&page={$prevPage}' class='btn' $prevDisabled>Предыдущая страница</a>
-            <a href='?id={$category['id']}&page={$nextPage}' class='btn' $nextDisabled>Следующая страница</a>
-          </div>";
-}
-
+    
+    if ($page == 1) {
+        echo "<div>
+                <a href='?id={$category['id']}&page={$nextPage}' class='btn' $nextDisabled>Следующая страница</a>
+              </div>";
+    } elseif (mysqli_num_rows($food_result) < $limit) {
+        echo "<div>
+                <a href='?id={$category['id']}&page={$prevPage}' class='btn' $prevDisabled>Предыдущая страница</a>
+              </div>";
+    } else {
+        echo "<div>
+                <a href='?id={$category['id']}&page={$prevPage}' class='btn' $prevDisabled>Предыдущая страница</a>
+                <a href='?id={$category['id']}&page={$nextPage}' class='btn' $nextDisabled>Следующая страница</a>
+              </div>";
+    }
+}    
 ?>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
-<script>var sugarData = [];
+<script>
+var sugarData = [];
 var satietyData = [];
 var carbsData = [];
+var nameData = [];
 
 <?php
 mysqli_data_seek($food_result, 0);
@@ -90,6 +101,7 @@ while ($food = mysqli_fetch_assoc($food_result)) {
     sugarData.push(<?php echo $food['sugar']; ?>);
     satietyData.push(<?php echo $food['satiety_index']; ?>);
     carbsData.push(<?php echo $food['carbs']; ?>);
+    nameData.push("<?php echo $food['name']; ?>");
 <?php
 }
 ?>
@@ -102,12 +114,20 @@ var sugarSatietyChart = new Chart(sugarSatietyCtx, {
             label: 'Продукт',
             data: sugarData.map((value, index) => ({
                 x: value,
-                y: satietyData[index]
+                y: satietyData[index],
+                productName: nameData[index] 
             })),
             backgroundColor: 'rgba(255, 99, 132, 0.5)'
         }]
     },
     options: {
+        tooltips: {
+            callbacks: {
+                label: function(tooltipItem, data) {
+                    return data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].productName;
+                }
+            }
+        },
         scales: {
             xAxes: [{
                 type: 'linear',
