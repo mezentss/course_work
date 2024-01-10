@@ -54,53 +54,59 @@ function checkIfFavourite($conn, $category_id, $user_id) {
 }
 ?>
 
-<h3>График содержания сахара и насыщенности</h3>
-<canvas id='sugarSatietyChart' width='400' height='200'></canvas>
+<div style="display: flex;">
+    <div style="margin-left: 250px;">
+    <h3>График насыщения</h3>
+        <canvas id='sugarSatietyChart' width='600' height='300'></canvas>
+    </div>
+</div>
 
 <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js'></script>
 <script>
-var sugarData = <?php echo json_encode(array_column($selected_food_data, 'sugar')); ?>;
-var satietyData = <?php echo json_encode(array_column($selected_food_data, 'satiety_index')); ?>;
-var nameData = <?php echo json_encode(array_column($selected_food_data, 'name')); ?>;
+    var sugarData = <?php echo json_encode(array_column($selected_food_data, 'sugar')); ?>;
+    var satietyData = <?php echo json_encode(array_column($selected_food_data, 'satiety_index')); ?>;
+    var nameData = <?php echo json_encode(array_column($selected_food_data, 'name')); ?>;
 
-var sugarSatietyCtx = document.getElementById('sugarSatietyChart').getContext('2d');
-var sugarSatietyChart = new Chart(sugarSatietyCtx, {
-    type: 'scatter',
-    data: {
-        datasets: [{
-            label: 'Продукт',
-            data: sugarData.map((value, index) => ({
-                x: value,
-                y: satietyData[index],
-                productName: nameData[index]
-            })),
-            backgroundColor: '#CBF458'
-        }]
-    },
-    options: {
-        tooltips: {
-            callbacks: {
-                label: function(tooltipItem, data) {
-                    return data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].productName;
-                }
-            }
-        },
-        scales: {
-            xAxes: [{
-                type: 'linear',
-                position: 'bottom',
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Сахар %'
-                }
-            }],
-            yAxes: [{
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Индекс насыщения'
-                }
+    var sugarSatietyCtx = document.getElementById('sugarSatietyChart').getContext('2d');
+    var sugarSatietyChart = new Chart(sugarSatietyCtx, {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'Продукт',
+                data: sugarData.map((value, index) => ({
+                    x: value,
+                    y: satietyData[index],
+                    productName: nameData[index]
+                })),
+                backgroundColor: '#CBF458'
             }]
+        },
+        options: {
+            tooltips: {
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        return data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].productName;
+                    }
+                }
+            },
+            scales: {
+                xAxes: [{
+                    type: 'linear',
+                    position: 'bottom',
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Сахар %'
+                    }
+                }],
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Индекс насыщения'
+                    }
+                }]
+            }
         }
-    }
-});
+    });
 </script>
+</body>
+</html>
