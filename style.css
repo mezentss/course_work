@@ -130,14 +130,11 @@ table {
 
 td{
   text-align: left;
+  padding: 8px;
 }
 
 table {
   border-collapse: collapse;
-}
-
-th, td {
-  padding: 8px;
 }
 
 canvas {

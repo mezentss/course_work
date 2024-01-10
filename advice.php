@@ -74,7 +74,7 @@ var sugarSatietyChart = new Chart(sugarSatietyCtx, {
                 y: satietyData[index],
                 productName: nameData[index]
             })),
-            backgroundColor: 'rgba(255, 99, 132, 0.5'
+            backgroundColor: '#CBF458'
         }]
     },
     options: {
