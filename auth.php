@@ -29,9 +29,10 @@ $content = "
         <input type=\"password\" name=\"password\" required>
     </div>
     
-    <div>
-        <button type=\"submit\">Войти</button>
-    </div>
+    <div style='text-align: center;'>
+    <button type='submit'>Войти</button>
+</div>
+
 </form>
 ";
 

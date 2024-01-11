@@ -29,7 +29,7 @@ $title = "Регистрация";
 $content = "
     <form method=\"POST\">
         <div>
-            <label>ФИО</label>
+            <label>Как к вам обращаться?</label>
             <input type=\"text\" name=\"name\" required>
         </div>
         

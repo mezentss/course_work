@@ -27,17 +27,14 @@ $sugarLevels = [
     "low" => [
         "image" => "images\low_sugar_image.jpg",
         "text" => "Ваш уровень сахара низкий",
-        "url" => "low_sugar_advice.php" 
     ],
     "medium" => [
         "image" => "images\medium_sugar_image.jpg",
         "text" => "Ваш уровень сахара в пределах нормы",
-        "url" => "medium_sugar_advice.php" 
     ],
     "high" => [
         "image" => "images\high_sugar_image.jpg",
         "text" => "Ваш уровень сахара высокий",
-        "url" => "high_sugar_advice.php" 
     ]
 ];
 
@@ -77,6 +74,7 @@ if(isset($_POST['update_likes'])) {
 
     $update_likes_query = "UPDATE likes SET favourite = $favourite_category, unloved = $unloved_category WHERE user_id = $user_id";
     mysqli_query($conn, $update_likes_query);
+    header("Location: user.php");
 }
 
 $randomFact = get_random_fact(); 
@@ -85,11 +83,11 @@ $title = "Личный кабинет";
 
 $content = '
 <div style="display: flex;">
-    <div style="padding: 0 20px 0 20px;">
+    <div style="padding: 0 20px 0 200px;">
         <form method="POST">
             <h2>Личные данные</h2>
             <div>
-                <label>ФИО</label>
+                <label>Пользователь</label>
                 <input type="text" name="name" value= '.$user['name'].' required>
             </div>
             <div>
@@ -110,7 +108,7 @@ $content = '
             </div>
         </form>
     </div>
-    <div style="padding: 0 20px 0 20px;">
+    <div style="padding: 0 200px 0 20px;">
         <form method="POST">
             <h2>Категории продуктов</h2>
             <div>
@@ -132,16 +130,13 @@ $content = '
             </div>
         </form>
     </div>
-    <div style="padding: 0 20px 0 20px;">
+    <div style="padding: 0 300px 0 0px;">
         <h2>Для вас!</h2>
         <p>' .$randomFact. '</p>
+        <img src="' . $sugarLevelInfo['image'] . '" alt="Уровень сахара" style="max-width: 200px;">
+        <p>' . $sugarLevelInfo['text'] . '</p>
     </div>
-    <div style=" padding: 40px 0 0 450px;">
-    <img src="' . $sugarLevelInfo['image'] . '" alt="Уровень сахара" style="max-width: 200px;">
-    <p>' . $sugarLevelInfo['text'] . '</p>
-    <a href="' . $sugarLevelInfo['url'] . '" class="button">Получить совет</a>
-    </div>
-</div>
+    
 </form>';
 
 require("template.php");

@@ -4,6 +4,10 @@ require("db_connect.php");
 
 $user_id = ($session_user)['id'];
 
+$page = isset($_GET['page']) ? $_GET['page'] : 1;
+$limit = 10;
+$offset = ($page - 1) * $limit;
+
 $sugar_level_query = "SELECT sugar_level FROM current_sugar WHERE user_id = $user_id";
 $sugar_level_result = mysqli_query($conn, $sugar_level_query);
 $sugar_level = mysqli_fetch_assoc($sugar_level_result)['sugar_level'];
@@ -18,7 +22,7 @@ if ($sugar_level < 5.4) {
 $selected_cluster_id_result = mysqli_query($conn, $selected_cluster_id_query);
 $selected_cluster_id = mysqli_fetch_assoc($selected_cluster_id_result)['cluster_id'];
 
-$selected_food_query = "SELECT * FROM food WHERE cluster_id = $selected_cluster_id";
+$selected_food_query = "SELECT * FROM food WHERE cluster_id = $selected_cluster_id LIMIT $limit OFFSET $offset";
 $selected_food_result = mysqli_query($conn, $selected_food_query);
 
 $selected_food_data = [];
@@ -45,6 +49,7 @@ if (!$favourite_present) {
 }
 
 $content .= "</table>";
+
 require("template.php");
 
 function checkIfFavourite($conn, $category_id, $user_id) {
@@ -108,5 +113,15 @@ function checkIfFavourite($conn, $category_id, $user_id) {
         }
     });
 </script>
+<?php
+echo "<div style='display: flex; justify-content: center; margin-top: 20px;'>";
+if ($page > 1) {
+    echo "<a href='?page=" . ($page - 1) . "' class='btn'>Предыдущая страница</a>";
+} 
+if (mysqli_num_rows($selected_food_result) == $limit) {
+    echo "<a href='?page=" . ($page + 1) . "' class='btn' style='margin-left: 20px;'>Следующая страница</a>";
+}
+echo "</div>";
+?>
 </body>
 </html>
