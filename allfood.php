@@ -23,21 +23,28 @@ $data = array();
 $backgroundColors = array();
 
 foreach ($chartData as $dataPoint) {
+    $backgroundColors = [
+        '#3B931A', '#B75F6D', '#9F1C31', '#9CF07D', '#F9A1AF',
+        '#CE4AA6', '#78E251', '#861865', '#E778C5', '#E795CE',
+        '#CBF458', '#A0B75F', '#7C9F1C', '#DAFA82', '#E2FAA2',
+        '#78E251', '#6EA958', '#3B931A', '#9CF07D', '#B3F09C'
+    ];  
     $labels[] = $dataPoint["category"];
-    $data[] = $dataPoint["count"];
-    $backgroundColors[] = "rgba(" . rand(0, 255) . ", " . rand(0, 255) . ", " . rand(0, 255) . ", 0.7)";
+    $data[] = $dataPoint["count"] ;
 }
 
-$chartHtml = "<canvas id='myPieChart'></canvas>";
+$chartHtml = "<canvas id='myPieChart' style='position: center; max-width: 300px; '></canvas>";
 
 $result = mysqli_query($conn, "SELECT * FROM categories");
-$title = "Вся еда";
-$content = "<h2>Категории</h2>";
-$content .= "<div style='display: flex;'>
-                <div style='flex: 1;'>";
+$title = "";
+$content =
+"<div style='display: flex;'>
+<div style='flex: 1;'>";
+
 if(!$result || mysqli_num_rows($result) == 0){
     $content .= "В базе данных нет категорий.";
 } else {
+    $content .= "<h2>Категории</h2>";
     while($category = mysqli_fetch_assoc($result)){
         $content .= "<h3><a href='category.php?id={$category['id']}'>{$category['name']}</a></h3>";
     }
@@ -49,7 +56,12 @@ $content .= "</div>
             <div style='flex: 1;'>
                 <h2>Для вас!</h2>
                 <p>$randomFact</p>
-                $chartHtml
+                <h2>Количество продуктов в категориях:</h2>
+                <div style='display: flex; justify-content: center;'>
+                    <div style='max-width: 350px;'>
+                        <canvas id='myPieChart'></canvas>
+                    </div>
+                </div>
             </div>
         </div>";
 
@@ -67,6 +79,6 @@ require("template.php");
                 data: <?php echo json_encode($data); ?>,
                 backgroundColor: <?php echo json_encode($backgroundColors); ?>
             }]
-        }
+        },
     });
 </script>
