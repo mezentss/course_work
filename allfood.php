@@ -8,39 +8,36 @@ if (isset($_GET["user_id"])) {
     $session_user = $_SESSION["user"];
 }
 
-$result = mysqli_query($conn, "SELECT c.name as category_name, COUNT(f.id) as food_count
-                                FROM categories c
-                                LEFT JOIN food f ON c.id = f.category
-                                GROUP BY c.name");
+// Создание временной таблицы с вычисленной насыщенностью
+mysqli_query($conn, "CREATE TEMPORARY TABLE IF NOT EXISTS temp_satiety_counts AS
+                        SELECT 
+                            CASE 
+                                WHEN f.satiety_index <= 0.4 THEN 'Трудно насытиться' 
+                                WHEN f.satiety_index > 0.4 AND f.satiety_index < 0.7 THEN 'Достаточно сытно' 
+                                ELSE 'Очень сытно' 
+                            END AS satiety_category,
+                            COUNT(f.id) as product_count 
+                        FROM food f 
+                        GROUP BY satiety_category");
 
-$chartData = array();
+// Получение данных из временной таблицы
+$result = mysqli_query($conn, "SELECT satiety_category, product_count FROM temp_satiety_counts");
+
+$chartDataSatiety = array();
+
+$chartDataSatiety = array();
+
 while ($row = mysqli_fetch_assoc($result)) {
-    $chartData[] = array("category" => $row["category_name"], "count" => $row["food_count"]);
+    $chartDataSatiety[$row['satiety_category']] = $row['product_count'];
 }
 
-$labels = array();
-$data = array();
-$backgroundColors = array();
-
-foreach ($chartData as $dataPoint) {
-    $backgroundColors = [
-        '#3B931A', '#B75F6D', '#9F1C31', '#9CF07D', '#F9A1AF',
-        '#CE4AA6', '#78E251', '#861865', '#E778C5', '#E795CE',
-        '#CBF458', '#A0B75F', '#7C9F1C', '#DAFA82', '#E2FAA2',
-        '#78E251', '#6EA958', '#3B931A', '#9CF07D', '#B3F09C'
-    ];  
-    $labels[] = $dataPoint["category"];
-    $data[] = $dataPoint["count"] ;
-}
-
-$chartHtml = "<canvas id='myPieChart' style='position: center; max-width: 300px; '></canvas>";
+$labelsSatiety = ["Трудно насытиться", "Достаточно сытно", "Очень сытно"];
+$dataSatiety = array_values($chartDataSatiety);
+$chartHtmlSatiety = "<canvas id='myPieChartSatiety' style='max-width: 300px; margin: auto;'></canvas>";
 
 $result = mysqli_query($conn, "SELECT * FROM categories");
 $title = "";
-$content =
-"<div style='display: flex;'>
-<div style='flex: 1;'>";
-
+$content = "<div style='display: flex;'><div style='flex: 1;'>";
 if(!$result || mysqli_num_rows($result) == 0){
     $content .= "В базе данных нет категорий.";
 } else {
@@ -59,25 +56,31 @@ $content .= "</div>
                 <h2>Количество продуктов в категориях:</h2>
                 <div style='display: flex; justify-content: center;'>
                     <div style='max-width: 350px;'>
-                        <canvas id='myPieChart'></canvas>
+                        $chartHtmlSatiety
                     </div>
                 </div>
             </div>
         </div>";
 
+
 require("template.php");
 ?>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
-    var ctx = document.getElementById('myPieChart').getContext('2d');
-    var myPieChart = new Chart(ctx, {
+    var ctxSatiety = document.getElementById('myPieChartSatiety').getContext('2d');
+    var myPieChartSatiety = new Chart(ctxSatiety, {
         type: 'pie',
         data: {
-            labels: <?php echo json_encode($labels); ?>,
+            labels: <?php echo json_encode($labelsSatiety); ?>,
             datasets: [{
-                data: <?php echo json_encode($data); ?>,
-                backgroundColor: <?php echo json_encode($backgroundColors); ?>
+                data: <?php echo json_encode($dataSatiety); ?>,
+                backgroundColor: [
+                    '#DAFA82',
+                    '#F45870',
+                    '#3B931A'
+                ]
             }]
         },
     });

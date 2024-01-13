@@ -59,11 +59,11 @@ if(isset($_POST['update_profile'])) {
     mysqli_query($conn, $insert_sugar_query);
     
     if($new_sugar_level < 5.4) {
-        $result = mysqli_query($conn, "CALL dbscan(0.2, 2)");
+        $result = mysqli_query($conn, "CALL dbscan(0.8, 15)");
     } elseif ($new_sugar_level >= 5.4 && $new_sugar_level <= 8.4) {
-        $result = mysqli_query($conn, "CALL dbscan(0.02, 5)");
+        $result = mysqli_query($conn, "CALL dbscan(0.5, 10)");
     } else {
-        $result = mysqli_query($conn, "CALL dbscan(1, 7)");
+        $result = mysqli_query($conn, "CALL dbscan(0.02, 10)");
     }
     header("Location: advice.php?user_id=$user_id&new_sugar_level=$new_sugar_level");
 }

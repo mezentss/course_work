@@ -1,8 +1,11 @@
 <?php
 require("session.php");
 require("db_connect.php");
+require("category_selector.php");
 
 $user_id = ($session_user)['id'];
+
+$title = '';
 
 $page = isset($_GET['page']) ? $_GET['page'] : 1;
 $limit = 10;
@@ -12,11 +15,14 @@ $sugar_level_query = "SELECT sugar_level FROM current_sugar WHERE user_id = $use
 $sugar_level_result = mysqli_query($conn, $sugar_level_query);
 $sugar_level = mysqli_fetch_assoc($sugar_level_result)['sugar_level'];
 
-$selected_cluster_id_query = "SELECT cluster_id FROM food ORDER BY satiety_index DESC LIMIT 1";
+$selected_cluster_id_query = "SELECT cluster_id FROM food ";
+
 if ($sugar_level < 5.4) {
-    $selected_cluster_id_query = "SELECT cluster_id FROM food ORDER BY satiety_index DESC LIMIT 1";
+    $selected_cluster_id_query .= "ORDER BY satiety_index DESC LIMIT 10";
 } elseif ($sugar_level > 8.4) {
-    $selected_cluster_id_query = "SELECT cluster_id FROM food ORDER BY satiety_index ASC LIMIT 1";
+    $selected_cluster_id_query .= "ORDER BY satiety_index ASC LIMIT 10";
+} else {
+    $selected_cluster_id_query .= "ORDER BY RAND() LIMIT 10";
 }
 
 $selected_cluster_id_result = mysqli_query($conn, $selected_cluster_id_query);
@@ -30,38 +36,30 @@ while ($row = mysqli_fetch_assoc($selected_food_result)) {
     $selected_food_data[] = $row;
 }
 
-$title = "Возможно вы захотите перекусить этими продуктами:";
-$content = "<table><tr><th>Название продукта</th><th>Индекс насыщения</th></tr>";
+$categoryOptions = getCategoryOptions($conn);
+
+$content = "<div>
+    <label for='category'>Выберите категорию:</label>
+    <select id='category' name='category'>
+        <option value='all'>Все категории</option>
+        $categoryOptions
+    </select>
+    <button onclick='applyCategoryFilter()'>Применить</button>
+    </div>";
+
+$content .= "<table id='productTable'><tr><th>Название продукта</th><th>Индекс насыщения</th></tr>";
 $favourite_present = false;
-
 foreach ($selected_food_data as $row) {
-    if (checkIfFavourite($conn, $row['category'], $user_id)) {
-        $favourite_present = true;
-    }
-    $content .= "<tr><td>" . $row['name'] . "</td><td>" . $row['satiety_index'] . "</td></tr>";
+    $content .= "<tr class='productRow' data-category='{$row['category']}'><td>{$row['name']}</td><td>{$row['satiety_index']}</td></tr>";
 }
-
-if (!$favourite_present) {
-    $favourite_product_query = "SELECT * FROM food WHERE category = (SELECT favourite FROM likes WHERE user_id = $user_id) LIMIT 1";
-    $favourite_product_result = mysqli_query($conn, $favourite_product_query);
-    $favourite_product = mysqli_fetch_assoc($favourite_product_result);
-    $content .= "<tr><td>" . $favourite_product['name'] . "</td><td>" . $favourite_product['satiety_index'] . "</td></tr>";
-}
-
 $content .= "</table>";
 
 require("template.php");
-
-function checkIfFavourite($conn, $category_id, $user_id) {
-    $check_favourite_query = "SELECT * FROM likes WHERE user_id = $user_id AND favourite = $category_id";
-    $check_favourite_result = mysqli_query($conn, $check_favourite_query);
-    return mysqli_num_rows($check_favourite_result) > 0;
-}
 ?>
 
 <div style="display: flex;">
     <div style="margin-left: 250px;">
-    <h3>График насыщения</h3>
+        <h3>График насыщения</h3>
         <canvas id='sugarSatietyChart' width='600' height='300'></canvas>
     </div>
 </div>
@@ -100,7 +98,7 @@ function checkIfFavourite($conn, $category_id, $user_id) {
                     position: 'bottom',
                     scaleLabel: {
                         display: true,
-                        labelString: 'Сахар %'
+                        labelString: 'Сахар%'
                     }
                 }],
                 yAxes: [{
@@ -112,16 +110,27 @@ function checkIfFavourite($conn, $category_id, $user_id) {
             }
         }
     });
+    function applyCategoryFilter() {
+        var selectedCategory = document.getElementById('category').value;
+        var productRows = document.getElementsByClassName('productRow');
+
+        for (var i = 0; i < productRows.length; i++) {
+            if (selectedCategory === 'all' || productRows[i].dataset.category === selectedCategory) {
+                productRows[i].style.display = 'table-row';
+            } else {
+                productRows[i].style.display = 'none';
+            }
+        }
+    }
 </script>
+
 <?php
 echo "<div style='display: flex; justify-content: center; margin-top: 20px;'>";
 if ($page > 1) {
     echo "<a href='?page=" . ($page - 1) . "' class='btn'>Предыдущая страница</a>";
-} 
+}
 if (mysqli_num_rows($selected_food_result) == $limit) {
     echo "<a href='?page=" . ($page + 1) . "' class='btn' style='margin-left: 20px;'>Следующая страница</a>";
 }
 echo "</div>";
 ?>
-</body>
-</html>
