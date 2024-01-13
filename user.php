@@ -88,8 +88,8 @@ $content = '
             <h2>Личные данные</h2>
             <div>
                 <label>Пользователь</label>
-                <input type="text" name="name" value= '.$user['name'].' required>
-            </div>
+                <input type="text" name="name" value="'.$user['name'].'" required>
+                </div>
             <div>
                 <label>Пароль</label>
                 <input type="password" name="password" required>
