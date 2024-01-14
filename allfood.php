@@ -8,7 +8,6 @@ if (isset($_GET["user_id"])) {
     $session_user = $_SESSION["user"];
 }
 
-// Создание временной таблицы с вычисленной насыщенностью
 mysqli_query($conn, "CREATE TEMPORARY TABLE IF NOT EXISTS temp_satiety_counts AS
                         SELECT 
                             CASE 
@@ -20,7 +19,6 @@ mysqli_query($conn, "CREATE TEMPORARY TABLE IF NOT EXISTS temp_satiety_counts AS
                         FROM food f 
                         GROUP BY satiety_category");
 
-// Получение данных из временной таблицы
 $result = mysqli_query($conn, "SELECT satiety_category, product_count FROM temp_satiety_counts");
 
 $chartDataSatiety = array();
@@ -37,20 +35,44 @@ $chartHtmlSatiety = "<canvas id='myPieChartSatiety' style='max-width: 300px; mar
 
 $result = mysqli_query($conn, "SELECT * FROM categories");
 $title = "";
-$content = "<div style='display: flex;'><div style='flex: 1;'>";
+$content = "<div style='display: flex;'>
+<div  class='category-link' style='flex: 1; 
+border: 2px dotted #78E251;
+border-radius: 10px;'>";
 if(!$result || mysqli_num_rows($result) == 0){
     $content .= "В базе данных нет категорий.";
 } else {
+    $imageCounter = 1;
     $content .= "<h2>Категории</h2>";
+    $content .= '<script>
+                  var categoryImages = ["images/category1.jpg", "images/category2.jpg", "images/category3.jpg",
+                    "images/category4.jpg","images/category5.jpg","images/category6.jpg","images/category7.jpg",
+                    "images/category8.jpg","images/category9.jpg","images/category10.jpg","images/category11.jpg",
+                  ];
+                </script>'; 
+
     while($category = mysqli_fetch_assoc($result)){
-        $content .= "<h3><a href='category.php?id={$category['id']}'>{$category['name']}</a></h3>";
+        $content .= "<h3 class='category-item' data-category-index='$imageCounter'>
+        <a href='category.php?id={$category['id']}' class='category-link'><span>{$category['name']}</span></a>
+        <img src='images/category{$imageCounter}.jpg' class='category-image' alt='{$category['name']}' />
+    </h3>";
+            $imageCounter++;
     }
 }
 
 $randomFact = get_random_fact();
 
 $content .= "</div>
-            <div style='flex: 1;'>
+            <div style='flex: 1; 
+            background: radial-gradient(
+                circle, 
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.5) 0%,
+                #78E251 50%, 
+                rgba(255, 255, 255, 0.5) 90%,
+                rgba(255, 255, 255, 0) 100% 
+            );
+            padding: 10px;'>
                 <h2>Для вас!</h2>
                 <p>$randomFact</p>
                 <h2>Количество продуктов в категориях:</h2>
@@ -84,4 +106,32 @@ require("template.php");
             }]
         },
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var categoryLinks = document.querySelectorAll('.category-link');
+        categoryLinks.forEach(function(link) {
+            link.addEventListener('mouseenter', function() {
+                var categoryIndex = parseInt(this.getAttribute('data-category-index')) - 1;
+                this.style.backgroundImage = 'url(' + categoryImages[categoryIndex] + ')';
+            });
+            link.addEventListener('mouseleave', function() {
+                this.style.backgroundImage = 'none';
+            });
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+    var categoryItems = document.querySelectorAll('.category-item');
+    categoryItems.forEach(function(item) {
+        item.addEventListener('mouseenter', function() {
+            var image = this.querySelector('.category-image');
+            image.style.opacity = 1; // при наведении показываем изображение
+        });
+        item.addEventListener('mouseleave', function() {
+            var image = this.querySelector('.category-image');
+            image.style.opacity = 0; // при уходе курсора скрываем изображение
+        });
+    });
+});
+
 </script>
