@@ -32,7 +32,7 @@ if(!$food_result || mysqli_num_rows($food_result) == 0){
         $satiety_text = '';
 
         if ($food['satiety_index'] <= 0.4) {
-            $satiety_text = "Трудно насытиться";
+            $satiety_text = "Подойдёт для перекуса";
         } elseif ($food['satiety_index'] > 0.4 && $food['satiety_index'] < 0.7) {
             $satiety_text = "Достаточно сытно";
         } else {
@@ -70,20 +70,20 @@ if(!$food_result || mysqli_num_rows($food_result) == 0){
     $prevDisabled = ($prevPage <= 0) ? "disabled" : "";
     $nextDisabled = (mysqli_num_rows($food_result) < $limit) ? "disabled" : "";
     
-    if ($page == 1) {
-        echo "<div>
+    if ($page == 1 && mysqli_num_rows($food_result) == $limit) {
+        echo "<div style='text-align: center;'>
                 <a href='?id={$category['id']}&page={$nextPage}' class='btn' $nextDisabled>Следующая страница</a>
               </div>";
-    } elseif (mysqli_num_rows($food_result) < $limit) {
-        echo "<div>
-                <a href='?id={$category['id']}&page={$prevPage}' class='btn' $prevDisabled>Предыдущая страница</a>
-              </div>";
-    } else {
-        echo "<div>
+    } elseif ($page > 1 && mysqli_num_rows($food_result) == $limit) {
+        echo "<div style='text-align: center;'>
                 <a href='?id={$category['id']}&page={$prevPage}' class='btn' $prevDisabled>Предыдущая страница</a>
                 <a href='?id={$category['id']}&page={$nextPage}' class='btn' $nextDisabled>Следующая страница</a>
               </div>";
-    }
+    } elseif ($page > 1 && mysqli_num_rows($food_result) < $limit) {
+        echo "<div style='text-align: center;'>
+                <a href='?id={$category['id']}&page={$prevPage}' class='btn' $prevDisabled>Предыдущая страница</a>
+              </div>";
+    }    
 }    
 ?>
 

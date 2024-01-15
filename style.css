@@ -122,8 +122,9 @@ footer {
 
 table {
   float: left;
-  border: 5px dotted #78E251;
+  border: 5px dotted rgb(120, 226, 81);
   border-radius: 10px;
+  width: 500px;
 }
 
 td{
@@ -173,10 +174,11 @@ canvas {
 .category-image {
   position: fixed;
   top: 90px;
-  left: 7px;
-  width: 50%;
+  left: 0px;
+  width: 49%;
   height: 75%;
   opacity: 0; 
   transition: opacity 0.5s;
   border-radius: 10px;
+  filter: blur(5px);
 }

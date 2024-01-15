@@ -25,15 +25,15 @@ $likes_un = mysqli_fetch_assoc($likes_un_result);
 
 $sugarLevels = [
     "low" => [
-        "image" => "images\low_sugar_image.jpg",
+        "image" => "images\low_sugar_image.png",
         "text" => "Ваш уровень сахара низкий",
     ],
     "medium" => [
-        "image" => "images\medium_sugar_image.jpg",
+        "image" => "images\medium_sugar_image.png",
         "text" => "Ваш уровень сахара в пределах нормы",
     ],
     "high" => [
-        "image" => "images\high_sugar_image.jpg",
+        "image" => "images\high_sugar_image.png",
         "text" => "Ваш уровень сахара высокий",
     ]
 ];
@@ -82,8 +82,18 @@ $randomFact = get_random_fact();
 $title = "Личный кабинет";
 
 $content = '
-<div style="display: flex;">
-    <div style="padding: 0 20px 0 200px;">
+<div style="display: flex;
+background: radial-gradient(
+    circle, 
+    rgba(255, 255, 255, 0.5) 40%,
+    #78E251  100%,
+    #78E251 100%, 
+    rgba(255, 255, 255, 0) 100%,
+    rgba(255, 255, 255, 0) 0% 
+);">
+    <div style="padding: 0 20px 0 200px;
+    border-top: 5px dotted #78E251;
+    border-bottom: 5px dotted #78E251;">
         <form method="POST">
             <h2>Личные данные</h2>
             <div>
@@ -130,7 +140,9 @@ $content = '
             </div>
         </form>
     </div>
-    <div style="padding: 0 300px 0 0px;">
+    <div style="padding: 0 300px 0 0px;
+    border-top: 5px dotted #78E251;
+    border-bottom: 5px dotted #78E251;">
         <h2>Для вас!</h2>
         <p>' .$randomFact. '</p>
         <img src="' . $sugarLevelInfo['image'] . '" alt="Уровень сахара" style="max-width: 200px;">

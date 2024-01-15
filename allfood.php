@@ -36,14 +36,11 @@ $chartHtmlSatiety = "<canvas id='myPieChartSatiety' style='max-width: 300px; mar
 $result = mysqli_query($conn, "SELECT * FROM categories");
 $title = "";
 $content = "<div style='display: flex;'>
-<div  class='category-link' style='flex: 1; 
-border: 2px dotted #78E251;
-border-radius: 10px;'>";
+<div style='flex: 1;'>";
 if(!$result || mysqli_num_rows($result) == 0){
     $content .= "В базе данных нет категорий.";
 } else {
     $imageCounter = 1;
-    $content .= "<h2>Категории</h2>";
     $content .= '<script>
                   var categoryImages = ["images/category1.jpg", "images/category2.jpg", "images/category3.jpg",
                     "images/category4.jpg","images/category5.jpg","images/category6.jpg","images/category7.jpg",
@@ -72,6 +69,8 @@ $content .= "</div>
                 rgba(255, 255, 255, 0.5) 90%,
                 rgba(255, 255, 255, 0) 100% 
             );
+            border-top: 5px dotted #78E251;
+            border-bottom: 5px dotted #78E251;
             padding: 10px;'>
                 <h2>Для вас!</h2>
                 <p>$randomFact</p>
@@ -125,11 +124,11 @@ require("template.php");
     categoryItems.forEach(function(item) {
         item.addEventListener('mouseenter', function() {
             var image = this.querySelector('.category-image');
-            image.style.opacity = 1; // при наведении показываем изображение
+            image.style.opacity = 1; 
         });
         item.addEventListener('mouseleave', function() {
             var image = this.querySelector('.category-image');
-            image.style.opacity = 0; // при уходе курсора скрываем изображение
+            image.style.opacity = 0; 
         });
     });
 });

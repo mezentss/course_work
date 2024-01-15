@@ -50,7 +50,16 @@ $content = "<div>
 $content .= "<table id='productTable'><tr><th>Название продукта</th><th>Индекс насыщения</th></tr>";
 $favourite_present = false;
 foreach ($selected_food_data as $row) {
-    $content .= "<tr class='productRow' data-category='{$row['category']}'><td>{$row['name']}</td><td>{$row['satiety_index']}</td></tr>";
+    $satiety_index = $row['satiety_index'];
+    $description = '';
+    if ($satiety_index <= 0.4) {
+        $description = "Подойдёт для перекуса";
+    } elseif ($satiety_index > 0.4 && $satiety_index < 0.7) {
+        $description = "Достаточно сытно";
+    } else {
+        $description = "Очень сытно";
+    }
+    $content .= "<tr class='productRow' data-category='{$row['category']}'><td>{$row['name']}</td><td>{$description}</td></tr>";
 }
 $content .= "</table>";
 
