@@ -11,7 +11,7 @@ if(!$result || mysqli_num_rows($result) == 0){
 
 $category = mysqli_fetch_assoc($result);
 $title = "Категория: " . $category['name'];
-$content = "<h2>{$category['name']}</h2>";
+$content = "";
 
 $page = isset($_GET['page']) ? $_GET['page'] : 1;
 $limit = 10;
@@ -23,29 +23,38 @@ if(!$food_result || mysqli_num_rows($food_result) == 0){
     $content .= "<p>К сожалению, в этой категории нет продуктов.</p>";
 } else {
     $content .= "<table>
-                    <tr>
-                        <th>Название</th>
-                        <th>Уровень насыщения</th>
-                    </tr>";
+    <tr>
+        <th>Название</th>
+        <th>Содержание сахара</th>
+        <th>Содержание углеводов</th>
+    </tr>";
+while($food = mysqli_fetch_assoc($food_result)){
+$sugar_text = '';
+$carbs_text = '';
 
-    while($food = mysqli_fetch_assoc($food_result)){
-        $satiety_text = '';
+if ($food['sugar'] <= 0.4) {
+$sugar_text = "Мало";
+} elseif ($food['sugar'] > 0.4 && $food['sugar'] < 0.7) {
+$sugar_text = "В норме";
+} else {
+$sugar_text = "Много";
+}
 
-        if ($food['satiety_index'] <= 0.4) {
-            $satiety_text = "Подойдёт для перекуса";
-        } elseif ($food['satiety_index'] > 0.4 && $food['satiety_index'] < 0.7) {
-            $satiety_text = "Достаточно сытно";
-        } else {
-            $satiety_text = "Очень сытно";
-        }
+if ($food['carbs'] <= 0.3) {
+$carbs_text = "Мало";
+} elseif ($food['carbs'] > 0.3 && $food['carbs'] < 0.7) {
+$carbs_text = "В норме";
+} else {
+$carbs_text = "Много";
+}
 
-        $content .= "<tr>
-                        <td>{$food['name']}</td>
-                        <td>{$satiety_text}</td>
-                    </tr>";
-    }
-
-    $content .= "</table>";
+$content .= "<tr>
+    <td>{$food['name']}</td>
+    <td style='text-align: center;'>{$sugar_text}</td>
+    <td style='text-align: center;'>{$carbs_text}</td>
+  </tr>";
+}
+$content .= "</table>";
 
     ob_start();
     require("template.php");
@@ -53,14 +62,12 @@ if(!$food_result || mysqli_num_rows($food_result) == 0){
 
     echo $output;
 
-    echo "<div style='display: flex; justify-content: space-around;'>
+    echo "<div style='display: flex; flex-direction: column; align-items: center;'>
             <div>
-                <h3>Содержание сахара</h3>
-                <canvas id='sugarSatietyChart' width='400' height='200'></canvas>
+                <canvas id='sugarSatietyChart' width='600' height='250'></canvas>
             </div>
             <div>
-                <h3>Содержание углеводов</h3>
-                <canvas id='carbsSatietyChart' width='400' height='200'></canvas>
+                <canvas id='carbsSatietyChart' width='600' height='250'></canvas>
             </div>
           </div>";
 
@@ -77,6 +84,7 @@ if(!$food_result || mysqli_num_rows($food_result) == 0){
     } elseif ($page > 1 && mysqli_num_rows($food_result) == $limit) {
         echo "<div style='text-align: center;'>
                 <a href='?id={$category['id']}&page={$prevPage}' class='btn' $prevDisabled>Предыдущая страница</a>
+                <span style='margin: 0 10px;'></span> 
                 <a href='?id={$category['id']}&page={$nextPage}' class='btn' $nextDisabled>Следующая страница</a>
               </div>";
     } elseif ($page > 1 && mysqli_num_rows($food_result) < $limit) {
@@ -153,21 +161,29 @@ var carbsSatietyChart = new Chart(carbsSatietyCtx, {
     data: {
         datasets: [{
             label: 'Продукт',
-            data: carbsData.map((value, index) => ({
+            data: sugarData.map((value, index) => ({
                 x: value,
-                y: satietyData[index]
+                y: satietyData[index],
+                productName: nameData[index] 
             })),
             backgroundColor: '#CBF458'
         }]
     },
     options: {
+        tooltips: {
+            callbacks: {
+                label: function(tooltipItem, data) {
+                    return data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].productName;
+                }
+            }
+        },
         scales: {
             xAxes: [{
                 type: 'linear',
                 position: 'bottom',
                 scaleLabel: {
                     display: true,
-                    labelString: 'Углеводы'
+                    labelString: 'Углеводы %'
                 }
             }],
             yAxes: [{

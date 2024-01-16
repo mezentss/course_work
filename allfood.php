@@ -21,16 +21,10 @@ mysqli_query($conn, "CREATE TEMPORARY TABLE IF NOT EXISTS temp_satiety_counts AS
 
 $result = mysqli_query($conn, "SELECT satiety_category, product_count FROM temp_satiety_counts");
 
-$chartDataSatiety = array();
-
-$chartDataSatiety = array();
-
 while ($row = mysqli_fetch_assoc($result)) {
     $chartDataSatiety[$row['satiety_category']] = $row['product_count'];
 }
 
-$labelsSatiety = ["Трудно насытиться", "Достаточно сытно", "Очень сытно"];
-$dataSatiety = array_values($chartDataSatiety);
 $chartHtmlSatiety = "<canvas id='myPieChartSatiety' style='max-width: 300px; margin: auto;'></canvas>";
 
 $result = mysqli_query($conn, "SELECT * FROM categories");
@@ -73,8 +67,10 @@ $content .= "</div>
             border-bottom: 5px dotted #78E251;
             padding: 10px;'>
                 <h2>Для вас!</h2>
-                <p>$randomFact</p>
-                <h2>Количество продуктов в категориях:</h2>
+                <p>Данное приложение создано с целью помощи по корректировке питания. 
+                Вы можете узнать о содержании сахара и углевода в продуктах, а также степень насыщения от каждого из них.
+                После регистрации вы получите доступ к персональным рекомендациям, основанным на уровне сахара в крови и вкусовых предпочтениях.</p>
+                <h2>Сбалансированное питание:</h2>
                 <div style='display: flex; justify-content: center;'>
                     <div style='max-width: 350px;'>
                         $chartHtmlSatiety
@@ -90,21 +86,21 @@ require("template.php");
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-    var ctxSatiety = document.getElementById('myPieChartSatiety').getContext('2d');
-    var myPieChartSatiety = new Chart(ctxSatiety, {
-        type: 'pie',
-        data: {
-            labels: <?php echo json_encode($labelsSatiety); ?>,
-            datasets: [{
-                data: <?php echo json_encode($dataSatiety); ?>,
-                backgroundColor: [
-                    '#DAFA82',
-                    '#F45870',
-                    '#3B931A'
-                ]
-            }]
-        },
-    });
+var ctxSatiety = document.getElementById('myPieChartSatiety').getContext('2d');
+var myPieChartSatiety = new Chart(ctxSatiety, {
+    type: 'pie',
+    data: {
+        labels: ["Углеводы", "Жиры", "Белки"],
+        datasets: [{
+            data: [50, 30, 20],
+            backgroundColor: [
+                '#DAFA82',
+                '#F45870',
+                '#3B931A'
+            ]
+        }]
+    },
+});
 
     document.addEventListener('DOMContentLoaded', function() {
         var categoryLinks = document.querySelectorAll('.category-link');

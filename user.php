@@ -26,15 +26,15 @@ $likes_un = mysqli_fetch_assoc($likes_un_result);
 $sugarLevels = [
     "low" => [
         "image" => "images\low_sugar_image.png",
-        "text" => "Ваш уровень сахара низкий",
+        "text" => "Ваш уровень сахара низкий!",
     ],
     "medium" => [
         "image" => "images\medium_sugar_image.png",
-        "text" => "Ваш уровень сахара в пределах нормы",
+        "text" => "Ваш уровень сахара в пределах нормы!",
     ],
     "high" => [
         "image" => "images\high_sugar_image.png",
-        "text" => "Ваш уровень сахара высокий",
+        "text" => "Ваш уровень сахара высокий!",
     ]
 ];
 
@@ -48,9 +48,11 @@ if($sugar['sugar_level'] < 5.4) {
 
 if(isset($_POST['update_profile'])) {
     $name = $_POST["name"];
+    $login = $_POST["login"];
     $password = $_POST["password"];
 
-    $update_user_query = "UPDATE users SET name = '$name', password = '$password' WHERE id = $user_id";
+
+    $update_user_query = "UPDATE users SET name = '$name', login = '$login', password = '$password' WHERE id = $user_id";
     mysqli_query($conn, $update_user_query);
     header("Location: user.php");
 } elseif(isset($_POST['update_sugar_level'])) {
@@ -62,7 +64,8 @@ if(isset($_POST['update_profile'])) {
         $result = mysqli_query($conn, "CALL dbscan(0.8, 15)");
     } elseif ($new_sugar_level >= 5.4 && $new_sugar_level <= 8.4) {
         $result = mysqli_query($conn, "CALL dbscan(0.5, 10)");
-    } else {
+    }
+     else {
         $result = mysqli_query($conn, "CALL dbscan(0.02, 10)");
     }
     header("Location: advice.php?user_id=$user_id&new_sugar_level=$new_sugar_level");
@@ -82,24 +85,18 @@ $randomFact = get_random_fact();
 $title = "Личный кабинет";
 
 $content = '
-<div style="display: flex;
-background: radial-gradient(
-    circle, 
-    rgba(255, 255, 255, 0.5) 40%,
-    #78E251  100%,
-    #78E251 100%, 
-    rgba(255, 255, 255, 0) 100%,
-    rgba(255, 255, 255, 0) 0% 
-);">
-    <div style="padding: 0 20px 0 200px;
-    border-top: 5px dotted #78E251;
-    border-bottom: 5px dotted #78E251;">
+<div style=" display: flex; text-align: center;">
+    <div style="padding: 0 150px 0 100px; display: flex; ">
         <form method="POST">
             <h2>Личные данные</h2>
-            <div>
+            <div style="padding: 0 20px;">
                 <label>Пользователь</label>
                 <input type="text" name="name" value="'.$user['name'].'" required>
-                </div>
+            </div>
+            <div>
+            <label>Логин</label>
+            <input type="text" login="login" value="'.$user['login'].'" required>
+            </div>
             <div>
                 <label>Пароль</label>
                 <input type="password" name="password" required>
@@ -109,18 +106,7 @@ background: radial-gradient(
             </div>
         </form>
         <form method="POST">
-            <h2>Уровень сахара</h2>
-            <div>
-                <input type="number" name="sugar_level" value='.$sugar['sugar_level'].' step="0.1" required>
-            </div>
-            <div>
-                <button type="submit" name="update_sugar_level">Сохранить</button>
-            </div>
-        </form>
-    </div>
-    <div style="padding: 0 200px 0 20px;">
-        <form method="POST">
-            <h2>Категории продуктов</h2>
+            <h2 style="padding: 0 20px;">Категории продуктов</h2>
             <div>
                 <label>Любимая категория:</label>
                 <select name="favourite_category">
@@ -140,15 +126,27 @@ background: radial-gradient(
             </div>
         </form>
     </div>
-    <div style="padding: 0 300px 0 0px;
-    border-top: 5px dotted #78E251;
-    border-bottom: 5px dotted #78E251;">
-        <h2>Для вас!</h2>
-        <p>' .$randomFact. '</p>
+<div>
+<form method="POST">
+<h2 style="padding: 0 20px;">Уровень сахара</h2>
+<div style="display: flex;">
+    <div style="display: block;">
+        <label>Нынешее значение:</label>
+        <input type="number" name="sugar_level" value='.$sugar['sugar_level'].' step="0.1" required>
+        <button type="submit" name="update_sugar_level">Сохранить</button>
+    </div>    
+    <div style="display: block; padding: 0 0 0 150px">
         <img src="' . $sugarLevelInfo['image'] . '" alt="Уровень сахара" style="max-width: 200px;">
         <p>' . $sugarLevelInfo['text'] . '</p>
     </div>
-    
+</div>
+<h2>Интересный факт:</h2>
+<div style="width: 600px;">
+<p>' .$randomFact. '</p>
+</div>
+</form>
+</div>
+
 </form>';
 
 require("template.php");

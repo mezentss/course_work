@@ -1,6 +1,9 @@
 <div id="header">
-<div class="logo-container">
+    <div class="logo-container">
         <img src="images\logo.png" alt="Логотип" class="logo">
+    </div>
+    <div class="title-container">
+        <a>С заботой о здоровье и уровне сахара в крови</a>
     </div>
     <ul id="menu">
         <li><a href="allfood.php">Категории</a></li>

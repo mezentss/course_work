@@ -36,18 +36,8 @@ while ($row = mysqli_fetch_assoc($selected_food_result)) {
     $selected_food_data[] = $row;
 }
 
-$categoryOptions = getCategoryOptions($conn);
-
-$content = "<div>
-    <label for='category'>Выберите категорию:</label>
-    <select id='category' name='category'>
-        <option value='all'>Все категории</option>
-        $categoryOptions
-    </select>
-    <button onclick='applyCategoryFilter()'>Применить</button>
-    </div>";
-
-$content .= "<table id='productTable'><tr><th>Название продукта</th><th>Индекс насыщения</th></tr>";
+$content = "<h2>Возможно сейчас вы захотите перекусить следующими продуктами:</h2>";
+$content .= "<table id='productTable'><tr><th>Название продукта</th><th>Уровень насыщения</th></tr>";
 $favourite_present = false;
 foreach ($selected_food_data as $row) {
     $satiety_index = $row['satiety_index'];
@@ -107,7 +97,7 @@ require("template.php");
                     position: 'bottom',
                     scaleLabel: {
                         display: true,
-                        labelString: 'Сахар%'
+                        labelString: 'Сахар %'
                     }
                 }],
                 yAxes: [{
@@ -119,18 +109,6 @@ require("template.php");
             }
         }
     });
-    function applyCategoryFilter() {
-        var selectedCategory = document.getElementById('category').value;
-        var productRows = document.getElementsByClassName('productRow');
-
-        for (var i = 0; i < productRows.length; i++) {
-            if (selectedCategory === 'all' || productRows[i].dataset.category === selectedCategory) {
-                productRows[i].style.display = 'table-row';
-            } else {
-                productRows[i].style.display = 'none';
-            }
-        }
-    }
 </script>
 
 <?php
