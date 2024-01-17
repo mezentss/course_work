@@ -85,20 +85,20 @@ $randomFact = get_random_fact();
 $title = "Личный кабинет";
 
 $content = '
-<div style=" display: flex; text-align: center;">
+<div style=" display: flex;">
     <div style="padding: 0 150px 0 100px; display: flex; ">
         <form method="POST">
-            <h2>Личные данные</h2>
+            <h2 >Личные данные</h2>
             <div style="padding: 0 20px;">
-                <label>Пользователь</label>
+                <label style="display: flex;">Пользователь</label>
                 <input type="text" name="name" value="'.$user['name'].'" required>
             </div>
             <div>
-            <label>Логин</label>
+            <label style="display: flex; padding: 0 0 0 20px">Логин</label>
             <input type="text" login="login" value="'.$user['login'].'" required>
             </div>
             <div>
-                <label>Пароль</label>
+                <label style="display: flex; padding: 0 0 0 20px">Пароль</label>
                 <input type="password" name="password" required>
             </div>
             <div>
@@ -108,43 +108,56 @@ $content = '
         <form method="POST">
             <h2 style="padding: 0 20px;">Категории продуктов</h2>
             <div>
-                <label>Любимая категория:</label>
+                <label style="display: flex; padding: 0 0 0 60px">Любимая категория:</label>
                 <select name="favourite_category">
                     <option value= ""> '.$likes_fv['name']. '</option>
                     ' . getCategoryOptions($conn) . '
                 </select>
             </div>
             <div>
-                <label>Нелюбимая категория:</label>
+                <label style="display: flex; padding: 0 0 0 60px">Нелюбимая категория:</label>
                 <select name="unloved_category">
                     <option value= ""> '.$likes_un['name']. '</option>
                     ' . getCategoryOptions($conn) . '
                 </select>
             </div>
-            <div>
+            <div style="display: flex;">
                 <button type="submit" name="update_likes">Сохранить</button>
             </div>
         </form>
     </div>
 <div>
 <form method="POST">
-<h2 style="padding: 0 20px;">Уровень сахара</h2>
-<div style="display: flex;">
-    <div style="display: block;">
-        <label>Нынешее значение:</label>
-        <input type="number" name="sugar_level" value='.$sugar['sugar_level'].' step="0.1" required>
-        <button type="submit" name="update_sugar_level">Сохранить</button>
-    </div>    
-    <div style="display: block; padding: 0 0 0 150px">
-        <img src="' . $sugarLevelInfo['image'] . '" alt="Уровень сахара" style="max-width: 200px;">
-        <p>' . $sugarLevelInfo['text'] . '</p>
+    <div style="flex: 1; 
+    background: radial-gradient(
+        circle, 
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.5) 0%,
+        #78E251 50%, 
+        rgba(255, 255, 255, 0.5) 90%,
+        rgba(255, 255, 255, 0) 100% 
+    );
+    border-top: 5px dotted #78E251;
+    border-bottom: 5px dotted #78E251;
+    padding: 10px;">
+        <h2 style="padding: 0 20px;">Уровень сахара</h2>
+        <div style="display: flex;">
+            <div style="display: block;">
+                <label style="display: flex;">Нынешее значение:</label>
+                <input type="number" name="sugar_level" value='.$sugar['sugar_level'].' step="0.1" required>
+                <button type="submit" name="update_sugar_level">Сохранить</button>
+            </div>    
+            <div style="display: block; padding: 0 0 0 150px">
+                <img src="' . $sugarLevelInfo['image'] . '" alt="Уровень сахара" style="max-width: 200px;">
+                <p>' . $sugarLevelInfo['text'] . '</p>
+            </div>
+        </div>
+        <h2>Интересный факт:</h2>
+        <div style="width: 600px;">
+        <p>' .$randomFact. '</p>
+        </div>
+    </form>
     </div>
-</div>
-<h2>Интересный факт:</h2>
-<div style="width: 600px;">
-<p>' .$randomFact. '</p>
-</div>
-</form>
 </div>
 
 </form>';

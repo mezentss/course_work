@@ -42,27 +42,27 @@ $title = "Регистрация";
 $content = "
     <form method=\"POST\">
         <div>
-            <label>Как к вам обращаться?</label>
+            <label style='display: flex; padding: 0 0 0 660px;'>Как к вам обращаться?</label>
             <input type=\"text\" name=\"name\" required>
         </div>
         
         <div>
-            <label>Логин</label>
+            <label style='display: flex; padding: 0 0 0 660px;'>Логин</label>
             <input type=\"text\" name=\"login\" required>
         </div>
         
         <div>
-            <label>Пароль</label>
+            <label style='display: flex; padding: 0 0 0 660px;'>Пароль</label>
             <input type=\"password\" name=\"password\" required>
         </div>
         
         <div>
-            <label>Уровень сахара</label>
+            <label style='display: flex; padding: 0 0 0 660px;'>Уровень сахара</label>
             <input type=\"number\" name=\"sugar_level\" step=\"0.1\">
         </div>
         
         <div>
-            <label>Любимая категория</label>
+            <label style='display: flex; padding: 0 0 0 660px;'>Любимая категория</label>
             <select name=\"favourite\">
                 <option value=\"\">Не выбрано</option>
                 " . getCategoryOptions($conn) . "
@@ -70,7 +70,7 @@ $content = "
         </div>
         
         <div>
-            <label>Нелюбимая категория</label>
+            <label style='display: flex; padding: 0 0 0 660px;'>Нелюбимая категория</label>
             <select name=\"unloved\">
                 <option value=\"\">Не выбрано</option>
                 " . getCategoryOptions($conn) . "
