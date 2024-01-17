@@ -5,7 +5,7 @@ if(!empty($_POST)){
     $login = $_POST["login"];
     $password = $_POST["password"];
 
-    $result = mysqli_query($conn, "SELECT * FROM users WHERE login=\"$login\" AND password=\"$password\"");
+    $result = mysqli_query($conn, "SELECT * FROM users WHERE login='$login' AND password='$password'");
 
     if($result && mysqli_num_rows($result) > 0){
         session_start();
@@ -18,15 +18,15 @@ if(!empty($_POST)){
 
 $title = "Авторизация";
 $content = "
-<form method=\"POST\">
+<form method='POST'>
     <div>
         <label>Логин</label>
-        <input type=\"text\" name=\"login\" required>
+        <input type='text' name='login' required>
     </div>
     
     <div>
         <label>Пароль</label>
-        <input type=\"password\" name=\"password\" required>
+        <input type='password' name='password' required>
     </div>
     
     <div style='text-align: center;'>
