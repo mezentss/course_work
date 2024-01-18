@@ -73,7 +73,7 @@ body {
 .title-container {
   text-align: left;
   max-height: 60px; 
-  padding: 30px 850px 0 0px;
+  padding: 30px 850px 0 5px;
 }
 
 #menu {

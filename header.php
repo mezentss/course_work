@@ -3,7 +3,7 @@
         <img src="images\logo.png" alt="Логотип" class="logo">
     </div>
     <div class="title-container">
-        <a>С заботой о здоровье и уровне сахара в крови</a>
+        <a>Приложение для контроля сахара и углеводов в продуктах</a>
     </div>
     <ul id="menu">
         <li><a href="allfood.php">Категории</a></li>
