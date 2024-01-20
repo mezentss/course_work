@@ -17,13 +17,9 @@ $sugar_level = mysqli_fetch_assoc($sugar_level_result)['sugar_level'];
 
 $selected_cluster_id_query = "SELECT cluster_id FROM food ";
 
-if ($sugar_level < 5.4) {
-    $selected_cluster_id_query .= "ORDER BY satiety_index DESC LIMIT 10";
-} elseif ($sugar_level > 8.4) {
-    $selected_cluster_id_query .= "ORDER BY satiety_index ASC LIMIT 10";
-} else {
-    $selected_cluster_id_query .= "ORDER BY RAND() LIMIT 10";
-}
+
+    $selected_cluster_id_query .= "ORDER BY RAND()";
+
 
 $selected_cluster_id_result = mysqli_query($conn, $selected_cluster_id_query);
 $selected_cluster_id = mysqli_fetch_assoc($selected_cluster_id_result)['cluster_id'];
